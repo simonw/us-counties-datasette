@@ -1,0 +1,57 @@
+title: US counties, their polygons and FIPS codes
+source: census.gov
+source_url: https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html
+about: simonw/us-counties-datasette
+about_url: https://github.com/simonw/us-counties-datasette
+databases:
+  counties:
+    queries:
+      county_for_latitude_longitude:
+        sql: |-
+          select
+            STATEFP as state_fips,
+            states.abbreviation as state,
+            STATEFP || COUNTYFP as county_fips,
+            counties.NAME as county_name,
+            COUNTYNS,
+            AFFGEOID,
+            GEOID,
+            LSAD,
+            ALAND,
+            AWATER
+          from
+            counties join states on counties.STATEFP = states.fips
+          where
+            within(
+              GeomFromText(
+                'POINT(' || :longitude || ' ' || :latitude || ')'
+              ),
+              counties.Geometry
+            )
+          limit
+            1
+      county_for_latitude_longitude_with_map:
+        sql: |-
+          select
+            STATEFP as state_fips,
+            states.abbreviation as state,
+            STATEFP || COUNTYFP as county_fips,
+            counties.NAME as county_name,
+            COUNTYNS,
+            AFFGEOID,
+            GEOID,
+            LSAD,
+            ALAND,
+            AWATER,
+            AsGeoJSON(geometry) as map
+          from
+            counties join states on counties.STATEFP = states.fips
+          where
+            within(
+              GeomFromText(
+                'POINT(' || :longitude || ' ' || :latitude || ')'
+              ),
+              counties.Geometry
+            )
+          limit
+            1
