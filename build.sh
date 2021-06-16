@@ -1,4 +1,6 @@
 #!/bin/bash
+set -eu -o pipefail
+
 shapefile-to-sqlite counties.db cb_2018_us_county_500k.zip \
     --table counties --spatial-index
 
