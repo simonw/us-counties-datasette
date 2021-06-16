@@ -10,6 +10,26 @@ spatialite counties.db 'drop table KNN'
 # Drop data_licenses
 spatialite counties.db 'drop table data_licenses'
 
+# Rename six counties with ambiguous names within their states
+sqlite-utils counties.db \
+    'update counties set NAME=:name where GEOID=:fips' \
+    -p name "Baltimore City" -p fips "24510"
+sqlite-utils counties.db \
+    'update counties set NAME=:name where GEOID=:fips' \
+    -p name "St Louis City" -p fips "29510"
+sqlite-utils counties.db \
+    'update counties set NAME=:name where GEOID=:fips' \
+    -p name "Fairfax City" -p fips "51600"
+sqlite-utils counties.db \
+    'update counties set NAME=:name where GEOID=:fips' \
+    -p name "Franklin City" -p fips "51620"
+sqlite-utils counties.db \
+    'update counties set NAME=:name where GEOID=:fips' \
+    -p name "Richmond City" -p fips "51760"
+sqlite-utils counties.db \
+    'update counties set NAME=:name where GEOID=:fips' \
+    -p name "Roanoke City" -p fips "51770"
+
 # Import states
 sqlite-utils insert counties.db states states.json --pk fips
 
