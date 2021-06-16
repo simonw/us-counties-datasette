@@ -3,8 +3,19 @@ source: census.gov
 source_url: https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html
 about: simonw/us-counties-datasette
 about_url: https://github.com/simonw/us-counties-datasette
+description_html: |-
+  <h2>Search counties</h2>
+  <form action="/counties/search_counties" method="GET">
+  <p>
+      <input name="_search" type="search" placeholder="Search counties"> <input type="submit" value="Search">
+  </p>
+  </form>
 databases:
   counties:
+    tables:
+      search_counties:
+        fts_table: counties_fts
+        fts_pk: rowid
     queries:
       county_for_latitude_longitude:
         sql: |-

@@ -30,6 +30,22 @@ sqlite-utils counties.db \
     'update counties set NAME=:name where GEOID=:fips' \
     -p name "Roanoke City" -p fips "51770"
 
+# Enable FTS
+sqlite-utils enable-fts counties.db counties NAME
+
+sqlite-utils create-view counties.db search_counties "
+select
+  counties.rowid as rowid,
+  states.abbreviation as state_abbreviation,
+  states.name as state,
+  counties.NAME as county,
+  counties.GEOID as fips_code,
+  AsGeoJSON(counties.geometry) as map
+from
+  counties
+  join states on counties.STATEFP = states.fips
+" --replace
+
 # Import states
 sqlite-utils insert counties.db states states.json --pk fips
 
