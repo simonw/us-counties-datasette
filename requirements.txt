@@ -3,4 +3,4 @@ sqlite-utils
 # Used for the deploy - listed here for the GitHub dependencies graph
 datasette
 datasette-leaflet-geojson
-datastte-block-robots
+datasette-block-robots
