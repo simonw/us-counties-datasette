@@ -34,10 +34,16 @@ databases:
             counties join states on counties.STATEFP = states.fips
           where
             within(
-              GeomFromText(
-                'POINT(' || :longitude || ' ' || :latitude || ')'
-              ),
+              MakePoint(cast(:longitude as float), cast(:latitude as float)),
               counties.Geometry
+            ) = 1 and counties.rowid in (
+              select
+                rowid
+              from
+                SpatialIndex
+              where
+                f_table_name = 'counties'
+                and search_frame = MakePoint(cast(:longitude as float), cast(:latitude as float))
             )
           limit
             1
@@ -59,10 +65,16 @@ databases:
             counties join states on counties.STATEFP = states.fips
           where
             within(
-              GeomFromText(
-                'POINT(' || :longitude || ' ' || :latitude || ')'
-              ),
+              MakePoint(cast(:longitude as float), cast(:latitude as float)),
               counties.Geometry
+            ) = 1 and counties.rowid in (
+              select
+                rowid
+              from
+                SpatialIndex
+              where
+                f_table_name = 'counties'
+                and search_frame = MakePoint(cast(:longitude as float), cast(:latitude as float))
             )
           limit
             1
