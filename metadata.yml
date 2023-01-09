@@ -10,6 +10,12 @@ description_html: |-
       <input name="_search" type="search" placeholder="Search counties"> <input type="submit" value="Search">
   </p>
   </form>
+allow_sql:
+  id: simon
+plugins:
+  datasette-auth-passwords:
+    simon_password_hash:
+      $env: SIMON_HASH
 databases:
   counties:
     tables:
